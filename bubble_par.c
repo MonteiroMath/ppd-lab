@@ -1,6 +1,6 @@
 // Compilar:
-// gcc -o bubble_seq bubble.c
-// ./bubble_seq 2 10
+// gcc -o bubble_par bubble_par.c -pthread
+// ./bubble_par 2 10
 
 #include <pthread.h>
 #include <stdio.h>
@@ -9,7 +9,7 @@
 #include <time.h>
 
 #define IMPRIME
-#define NUM_THREADS 4
+#define NUM_THREADS 2 // lembrar de ajustar número de threads de acordo com o número de parâmetros
 
 int bubble(int *array, unsigned int size)
 {
