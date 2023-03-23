@@ -1,0 +1,23 @@
+O programa bubble.c implementa o algoritmo de ordenação bubble sort e permite a ordenacao de N vetores de tamanho TAM
+
+1) Estudar o código com atenção especial para a estratégia de alocação de memória dos vetores
+
+2) Observar o uso de diretivas de compilação #ifdef
+
+3) Compilar e executar o programa para pequenos tamanhos de entrada
+ex. 
+./bubble_seq 2 10
+./bubble_seq 4 100
+
+4) Observe os resultados de saída para diferentes execuções do programa com mesmas entradas
+- Discutir o uso de srand(time(NULL));
+- Discutir sobre efeitos na execução do programa com diferentes entradas (dados mais ou menos ordenados)
+ 
+5) Executar o programa com entradas maiores (desabilitar o modo verboso de exibição dos vetores)
+./bubble_seq 100 2000
+./bubble_seq 100 5000
+
+6) Implemente uma versão paralela para o programa de modo que diferentes vetores podem ser ordenados simulaneamente por diferentes threads.
+
+7) Calcule o speed up e eficiência para execuções do programa com diferentes números de threads (ex. 2, 4, 8) e diferentes tamanhos do problema
+
