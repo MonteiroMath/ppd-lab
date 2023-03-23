@@ -2,19 +2,41 @@
 // gcc -o bubble_seq bubble.c
 // ./bubble_seq 2 10
 
+#include <pthread.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <sys/time.h>
 #include <time.h>
-#include <pthread.h>
 
 #define IMPRIME
 #define NUM_THREADS 4
 
+int bubble(int *array, unsigned int size)
+{
+
+  int i, j;
+  int temp;
+
+  for (i = 0; i < size - 1; i++)
+  {
+
+    for (j = 0; j < size - i - 1; j++)
+    {
+
+      if (array[j] > array[j + 1])
+      {
+        temp = array[j];
+        array[j] = array[j + 1];
+        array[j + 1] = temp;
+      }
+    }
+  }
+}
+
 // definição de struct para passagem de argumentos para a função da thread
 typedef struct
 {
-  int *array;
+  int **arrays;
   int n_arrays;
   int tam;
   int thread_num;
@@ -23,13 +45,17 @@ typedef struct
 // definição da função da thread
 void *t_function(void *arg)
 {
+
   int i;
   t_args *targ;
   targ = (t_args *)arg;
 
-  for (i = targ->thread_num * targ->n_arrays / NUM_THREADS; i < (targ->thread_num + 1) * targ->n_arrays / NUM_THREADS; i++)
+  // printf("args: \n  n: %d; tam: %d, t_num: %d\n", targ->n_arrays, targ->tam, targ->thread_num);
+  // printf("\nconditions:\n start: %d; end:%d\n", targ->thread_num * (targ->n_arrays / NUM_THREADS), (targ->thread_num + 1) * (targ->n_arrays / NUM_THREADS));
+
+  for (i = targ->thread_num * (targ->n_arrays / NUM_THREADS); i < (targ->thread_num + 1) * (targ->n_arrays / NUM_THREADS); i++)
   {
-    bubble(targ->array[i], targ->tam);
+    bubble(targ->arrays[i], targ->tam);
   }
 
   pthread_exit(NULL);
@@ -45,24 +71,6 @@ void imprime(int **array, int num_arrays, int size)
       printf("%d ", array[i][j]);
     }
     printf("\n");
-  }
-}
-
-int bubble(int *array, unsigned int size)
-{
-  int i, j;
-  int temp;
-  for (i = 0; i < size - 1; i++)
-  {
-    for (j = 0; j < size - i - 1; j++)
-    {
-      if (array[j] > array[j + 1])
-      {
-        temp = array[j];
-        array[j] = array[j + 1];
-        array[j + 1] = temp;
-      }
-    }
   }
 }
 
@@ -107,7 +115,8 @@ int main(int argc, char **argv)
   {
     // aloca memória e configura argumentos
     targs[i] = (t_args *)malloc(sizeof(t_args));
-    targs[i]->array = elementos;
+    targs[i]->arrays = elementos;
+    targs[i]->n_arrays = n;
     targs[i]->tam = tam;
     targs[i]->thread_num = i;
 
